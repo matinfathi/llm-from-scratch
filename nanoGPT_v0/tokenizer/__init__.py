@@ -9,12 +9,13 @@ Adding a new tokenizer only requires:
 
 from __future__ import annotations
 
-from base import BaseTokenizer
-from char import CharTokenizer
+from nanoGPT_v0.tokenizer.base import BaseTokenizer
+from nanoGPT_v0.tokenizer.bpe import BPETokenizer
+from nanoGPT_v0.tokenizer.char import CharTokenizer
 
 REGISTRY: dict[str, type[BaseTokenizer]] = {
     "char": CharTokenizer,
-    # "bpe": BPETokenizer,   ← add future tokenizers here
+    "bpe": BPETokenizer,
 }
 
 
@@ -27,4 +28,4 @@ def build_tokenizer(name: str, text: str) -> BaseTokenizer:
     return tokenizer
 
 
-__all__ = ["BaseTokenizer", "CharTokenizer", "build_tokenizer"]
+__all__ = ["BaseTokenizer", "BPETokenizer", "CharTokenizer", "build_tokenizer"]

@@ -16,9 +16,9 @@ from pathlib import Path
 import torch
 from tqdm import tqdm
 
-from config import GPTConfig, TrainConfig
-from model import GPT
-from tokenizer import build_tokenizer, BaseTokenizer
+from nanoGPT_v0.config import GPTConfig, TrainConfig
+from nanoGPT_v0.model import GPT
+from nanoGPT_v0.tokenizer import build_tokenizer, BaseTokenizer
 
 logging.basicConfig(
     level=logging.INFO,

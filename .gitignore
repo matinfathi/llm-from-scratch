@@ -12,3 +12,4 @@ wheels/
 
 # my ignores
 nanoGPT_v0/.env
+nanoGPT_v0/checkpoints/

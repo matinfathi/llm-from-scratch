@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
-from config import GPTConfig
+from nanoGPT_v0.config import GPTConfig
 
 
 # ── Building blocks ───────────────────────────────────────────────────────────

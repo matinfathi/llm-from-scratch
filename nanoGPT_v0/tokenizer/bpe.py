@@ -1,41 +1,41 @@
 """
-tokenizer/char.py — Character-level tokenizer (the original approach).
+tokenizer/bpe.py - Tiktoken-backed BPE tokenizer.
 """
 
 from __future__ import annotations
 
+import tiktoken
+
 from nanoGPT_v0.tokenizer.base import BaseTokenizer
 
 
-class CharTokenizer(BaseTokenizer):
-    """Maps every unique character in the corpus to an integer id."""
+class BPETokenizer(BaseTokenizer):
+    """Byte-pair encoding tokenizer using OpenAI's tiktoken encodings."""
 
-    def __init__(self) -> None:
-        self._stoi: dict[str, int] = {}
-        self._itos: dict[int, str] = {}
+    def __init__(self, encoding_name: str = "gpt2") -> None:
+        self.encoding_name = encoding_name
+        self._encoding = tiktoken.get_encoding(encoding_name)
 
     # ── BaseTokenizer interface ────────────────────────────────────────────
 
     def fit(self, text: str) -> None:
-        chars = sorted(set(text))
-        self._stoi = {c: i for i, c in enumerate(chars)}
-        self._itos = {i: c for c, i in self._stoi.items()}
+        """Tiktoken encodings are pretrained, so there is nothing to fit."""
 
     def encode(self, text: str) -> list[int]:
-        return [self._stoi[c] for c in text if c in self._stoi]
+        return self._encoding.encode(text)
 
     def decode(self, ids: list[int]) -> str:
-        return "".join(self._itos[i] for i in ids)
+        return self._encoding.decode(ids)
 
     @property
     def vocab_size(self) -> int:
-        return len(self._stoi)
+        return self._encoding.n_vocab
 
     # ── Persistence ────────────────────────────────────────────────────────
 
     def _state(self) -> dict:
-        return {"stoi": self._stoi}
+        return {"encoding_name": self.encoding_name}
 
     def _load_state(self, state: dict) -> None:
-        self._stoi = state["stoi"]
-        self._itos = {int(i): c for c, i in self._stoi.items()}
+        self.encoding_name = state["encoding_name"]
+        self._encoding = tiktoken.get_encoding(self.encoding_name)
